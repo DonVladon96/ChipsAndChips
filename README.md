@@ -1,6 +1,6 @@
 # **Тестовое задание в рамках трудоустройства на позицию React Frontend Developer в компанию Тендерплан**
 
-![preview](https://github.com/DonVladon96/search_github/blob/main/src/assets/preview.png)
+![preview](https://chips-and-chips-soe8.vercel.app/)
 
 ### **Для запуска приложения используйте следующие команды**
 ***
@@ -40,9 +40,8 @@
 * Accessibility
 * Vite
 
-https://search-github-1t59.vercel.app/
-
-### **Версия для просмотра https://search-github-1t59.vercel.app/**
+### **Версия для просмотра https://chips-and-chips-soe8.vercel.app/**
 Для деплоя приложения использовался сервис vercel.com
-автообновление приложения после каждого коммита
+
+Автообновление приложения после каждого коммита
 
