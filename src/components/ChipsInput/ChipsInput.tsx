@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 import './ChipsInput.css';
 
-interface ChipsInputProps {
-    value: string;
-    onChange: (newValue: string) => void;
-}
-
-const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
-    const [chips, setChips] = useState<string[]>([]);
+const ChipsInput = ({ value, onChange }) => {
+    const [chips, setChips] = useState([]);
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
     const [editValue, setEditValue] = useState('');
