@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import './ChipsInput.css';
 
-const ChipsInput = ({ value, onChange }) => {
+interface ChipsInputProps {
+    value: string;
+    onChange: (newValue: string) => void;
+}
+
+const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
     const [chips, setChips] = useState([]);
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
     const [editIndex, setEditIndex] = useState(null); // Индекс редактируемого чипа
@@ -66,13 +71,13 @@ const ChipsInput = ({ value, onChange }) => {
         const inputValue = document.querySelector('.tags__new_tag').value.trim();
         if (inputValue) {
             if (isQuoteOpen) {
-                setErrorMessage('Закройте кавычку перед добавлением чипа.'); // Уведомляем пользователя
+                setErrorMessage('Закройте кавычку перед добавлением чипса.');
             } else {
                 const updatedChips = [...chips, inputValue];
                 setChips(updatedChips);
                 onChange(updatedChips.join(', '));
                 document.querySelector('.tags__new_tag').value = ''; // Очищаем поле ввода
-                setErrorMessage(''); // Сбрасываем сообщение об ошибке
+                setErrorMessage('');
             }
         }
     };
@@ -86,7 +91,7 @@ const ChipsInput = ({ value, onChange }) => {
                             type="text"
                             value={editValue}
                             onChange={(e) => setEditValue(e.target.value)}
-                            onBlur={handleSaveEdit} // Сохраняем изменения при потере фокуса
+                            onBlur={handleSaveEdit}
                             className="tags__edit_input"
                         />
                     ) : (
@@ -101,10 +106,10 @@ const ChipsInput = ({ value, onChange }) => {
                 type="text"
                 placeholder="Введите ключевые слова"
                 onKeyDown={handleKeyDown}
-                onBlur={handleInputBlur} // Обработчик для потери фокуса
+                onBlur={handleInputBlur}
                 className="tags__new_tag"
             />
-            {errorMessage && <div className="tags__error-message">{errorMessage}</div>} {/* Отображаем сообщение об ошибке */}
+            {errorMessage && <div className="tags__error-message">{errorMessage}</div>}
         </div>
     );
 };
