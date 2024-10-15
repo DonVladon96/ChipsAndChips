@@ -1,24 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, KeyboardEvent } from 'react';
 import './ChipsInput.css';
 
-const ChipsInput = ({ value, onChange }) => {
-    const [chips, setChips] = useState([]);
-    const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-    const [editIndex, setEditIndex] = useState(null);
-    const [editValue, setEditValue] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+interface ChipsInputProps {
+    value: string;
+    onChange: (newValue: string) => void;
+}
+
+const ChipsInput = ({ value, onChange }: ChipsInputProps) => {
+    const [chips, setChips] = useState<string[]>(['']);
+    const [isQuoteOpen, setIsQuoteOpen] = useState<boolean>(false);
+    const [editIndex, setEditIndex] = useState<number | null>(null);
+    const [editValue, setEditValue] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
         setChips(value.split(',').map(tag => tag.trim()).filter(tag => tag));
     }, [value]);
 
-    const handleKeyDown = (e) => {
-        const inputValue = e.target.value;
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        const inputValue = e.currentTarget.value;
 
         if (e.key === '"') {
             setIsQuoteOpen(prev => !prev);
             e.preventDefault();
-            e.target.value += '"';
+            e.currentTarget.value += '"';
             return;
         }
 
@@ -30,7 +35,7 @@ const ChipsInput = ({ value, onChange }) => {
                     setChips(updatedChips);
                     onChange(updatedChips.join(', '));
                 }
-                e.target.value = '';
+                e.currentTarget.value = '';
                 setErrorMessage('');
             } else {
                 e.preventDefault();
@@ -39,13 +44,13 @@ const ChipsInput = ({ value, onChange }) => {
         }
     };
 
-    const handleDeleteChip = (chipToDelete) => {
+    const handleDeleteChip = (chipToDelete: string) => {
         const updatedChips = chips.filter(chip => chip !== chipToDelete);
         setChips(updatedChips);
         onChange(updatedChips.join(', '));
     };
 
-    const handleEditChip = (index) => {
+    const handleEditChip = (index: number) => {
         setEditIndex(index);
         setEditValue(chips[index]);
     };
@@ -54,25 +59,30 @@ const ChipsInput = ({ value, onChange }) => {
         const newChip = editValue.trim();
         if (newChip && !chips.includes(newChip)) {
             const updatedChips = [...chips];
-            updatedChips[editIndex] = newChip;
-            setChips(updatedChips);
-            onChange(updatedChips.join(', '));
+            if (editIndex !== null) {
+                updatedChips[editIndex] = newChip;
+                setChips(updatedChips);
+                onChange(updatedChips.join(', '));
+            }
         }
         setEditIndex(null);
         setEditValue('');
     };
 
     const handleInputBlur = () => {
-        const inputValue = document.querySelector('.tags__new_tag').value.trim();
-        if (inputValue) {
-            if (isQuoteOpen) {
-                setErrorMessage('Закройте кавычку перед добавлением чипса.');
-            } else {
-                const updatedChips = [...chips, inputValue];
-                setChips(updatedChips);
-                onChange(updatedChips.join(', '));
-                document.querySelector('.tags__new_tag').value = '';
-                setErrorMessage('');
+        const inputElement = document.querySelector('.tags__new_tag') as HTMLInputElement;
+        if (inputElement) {
+            const inputValue = inputElement.value.trim();
+            if (inputValue) {
+                if (isQuoteOpen) {
+                    setErrorMessage('Закройте кавычку перед добавлением чипса.');
+                } else {
+                    const updatedChips = [...chips, inputValue];
+                    setChips(updatedChips);
+                    onChange(updatedChips.join(', '));
+                    inputElement.value = '';
+                    setErrorMessage('');
+                }
             }
         }
     };
