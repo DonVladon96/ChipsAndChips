@@ -9,9 +9,9 @@ interface ChipsInputProps {
 const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
     const [chips, setChips] = useState([]);
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-    const [editIndex, setEditIndex] = useState(null); // Индекс редактируемого чипа
-    const [editValue, setEditValue] = useState(''); // Значение для редактирования
-    const [errorMessage, setErrorMessage] = useState(''); // Сообщение об ошибке
+    const [editIndex, setEditIndex] = useState(null);
+    const [editValue, setEditValue] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         setChips(value.split(',').map(tag => tag.trim()).filter(tag => tag));
@@ -36,7 +36,7 @@ const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
                     onChange(updatedChips.join(', '));
                 }
                 e.target.value = '';
-                setErrorMessage(''); // Сбрасываем сообщение об ошибке
+                setErrorMessage('');
             } else {
                 e.preventDefault();
             }
@@ -52,7 +52,7 @@ const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
 
     const handleEditChip = (index) => {
         setEditIndex(index);
-        setEditValue(chips[index]); // Устанавливаем значение для редактирования
+        setEditValue(chips[index]);
     };
 
     const handleSaveEdit = () => {
@@ -63,8 +63,8 @@ const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
             setChips(updatedChips);
             onChange(updatedChips.join(', '));
         }
-        setEditIndex(null); // Сбрасываем индекс редактирования
-        setEditValue(''); // Очищаем значение редактирования
+        setEditIndex(null);
+        setEditValue('');
     };
 
     const handleInputBlur = () => {
@@ -76,7 +76,7 @@ const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
                 const updatedChips = [...chips, inputValue];
                 setChips(updatedChips);
                 onChange(updatedChips.join(', '));
-                document.querySelector('.tags__new_tag').value = ''; // Очищаем поле ввода
+                document.querySelector('.tags__new_tag').value = '';
                 setErrorMessage('');
             }
         }

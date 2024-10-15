@@ -7,7 +7,7 @@ import "./App.css";
 import {Footer} from "./components/Footer/Footer.tsx";
 
 export default function App() {
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState("");
 
   return (
       <div className="main">
