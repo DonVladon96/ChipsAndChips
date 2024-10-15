@@ -7,7 +7,7 @@ interface ChipsInputProps {
 }
 
 const ChipsInput = ({ value, onChange } : ChipsInputProps) => {
-    const [chips, setChips] = useState([]);
+    const [chips, setChips] = useState<string[]>([]);
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
     const [editValue, setEditValue] = useState('');
