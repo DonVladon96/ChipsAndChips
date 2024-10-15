@@ -6,6 +6,7 @@ const ChipsInput = ({ value, onChange }) => {
     const [isQuoteOpen, setIsQuoteOpen] = useState(false);
     const [editIndex, setEditIndex] = useState(null); // Индекс редактируемого чипа
     const [editValue, setEditValue] = useState(''); // Значение для редактирования
+    const [errorMessage, setErrorMessage] = useState(''); // Сообщение об ошибке
 
     useEffect(() => {
         setChips(value.split(',').map(tag => tag.trim()).filter(tag => tag));
@@ -30,6 +31,7 @@ const ChipsInput = ({ value, onChange }) => {
                     onChange(updatedChips.join(', '));
                 }
                 e.target.value = '';
+                setErrorMessage(''); // Сбрасываем сообщение об ошибке
             } else {
                 e.preventDefault();
             }
@@ -48,16 +50,29 @@ const ChipsInput = ({ value, onChange }) => {
         setEditValue(chips[index]); // Устанавливаем значение для редактирования
     };
 
-    const handleSaveEdit = (e) => {
-        if (e.key === 'Enter') {
-            const newChip = editValue.trim();
-            if (newChip && !chips.includes(newChip)) {
-                const updatedChips = [...chips];
-                updatedChips[editIndex] = newChip;
+    const handleSaveEdit = () => {
+        const newChip = editValue.trim();
+        if (newChip && !chips.includes(newChip)) {
+            const updatedChips = [...chips];
+            updatedChips[editIndex] = newChip;
+            setChips(updatedChips);
+            onChange(updatedChips.join(', '));
+        }
+        setEditIndex(null); // Сбрасываем индекс редактирования
+        setEditValue(''); // Очищаем значение редактирования
+    };
+
+    const handleInputBlur = () => {
+        const inputValue = document.querySelector('.tags__new_tag').value.trim();
+        if (inputValue) {
+            if (isQuoteOpen) {
+                setErrorMessage('Закройте кавычку перед добавлением чипа.'); // Уведомляем пользователя
+            } else {
+                const updatedChips = [...chips, inputValue];
                 setChips(updatedChips);
                 onChange(updatedChips.join(', '));
-                setEditIndex(null); // Сбрасываем индекс редактирования
-                setEditValue(''); // Очищаем значение редактирования
+                document.querySelector('.tags__new_tag').value = ''; // Очищаем поле ввода
+                setErrorMessage(''); // Сбрасываем сообщение об ошибке
             }
         }
     };
@@ -71,8 +86,7 @@ const ChipsInput = ({ value, onChange }) => {
                             type="text"
                             value={editValue}
                             onChange={(e) => setEditValue(e.target.value)}
-                            onKeyDown={handleSaveEdit}
-                            onBlur={() => setEditIndex(null)} // Сбрасываем индекс при потере фокуса
+                            onBlur={handleSaveEdit} // Сохраняем изменения при потере фокуса
                             className="tags__edit_input"
                         />
                     ) : (
@@ -87,8 +101,10 @@ const ChipsInput = ({ value, onChange }) => {
                 type="text"
                 placeholder="Введите ключевые слова"
                 onKeyDown={handleKeyDown}
+                onBlur={handleInputBlur} // Обработчик для потери фокуса
                 className="tags__new_tag"
             />
+            {errorMessage && <div className="tags__error-message">{errorMessage}</div>} {/* Отображаем сообщение об ошибке */}
         </div>
     );
 };
